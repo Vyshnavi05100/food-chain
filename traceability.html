@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-top: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+        <div>
+            <h5 style="color: var(--primary); text-transform: uppercase;">Product Traceability Ledger</h5>
+            <h1 style="font-size: 3rem; font-weight: 700;">{{ product.name if product else "Product Details" }}</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem; font-family: monospace;">ID: {{
+                product.product_id if product else "- - -" }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Ledger Status</p>
+            <span class="badge badge-success" style="padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 20px;">
+                <i class="ph-fill ph-shield-check" style="margin-right: 0.5rem;"></i>
+                Verified & Immutable
+            </span>
+        </div>
+    </div>
+
+    <!-- Timeline Journey -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; margin-top: 4rem;">
+        <div>
+            <h2 style="margin-bottom: 2rem;">Journey Timeline</h2>
+            <div style="position: relative; padding-left: 2rem;">
+                <div
+                    style="position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary) 0%, var(--border) 100%);">
+                </div>
+
+                {% for entry in history|reverse %}
+                <div class="card glass"
+                    style="margin-bottom: 1.5rem; padding: 1.5rem; position: relative; transition: var(--transition);">
+                    <div
+                        style="position: absolute; left: -2.35rem; top: 1.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary-glow);">
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">{{ entry.timestamp }}</span>
+                        <span class="badge badge-success" style="text-transform: uppercase;">{{ entry.data.event or
+                            "TRACKING UPDATE" }}</span>
+                    </div>
+
+                    {% if entry.data.temperature %}
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem;">
+                        <div
+                            style="padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                            <p style="font-size: 0.7rem; color: var(--text-muted);">TEMPERATURE</p>
+                            <p
+                                style="font-size: 1.25rem; font-weight: 700; color: {{ 'var(--warning)' if entry.data.temperature > 8 else 'var(--primary)' }}">
+                                {{ entry.data.temperature }}°C</p>
+                        </div>
+                        <div
+                            style="padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                            <p style="font-size: 0.7rem; color: var(--text-muted);">HUMIDITY</p>
+                            <p style="font-size: 1.25rem; font-weight: 700;">{{ entry.data.humidity }}%</p>
+                        </div>
+                        <div
+                            style="padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                            <p style="font-size: 0.7rem; color: var(--text-muted);">FRESHNESS</p>
+                            <p style="font-size: 1.25rem; font-weight: 700;">{{ entry.data.freshness_score }}%</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Location: {{
+                        entry.data.location.lat }}, {{ entry.data.location.lng }}</p>
+                    {% else %}
+                    <p>{{ entry.data.details or "Product movement recorded on blockchain." }}</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Origin: {{
+                        entry.data.origin }}</p>
+                    {% endif %}
+
+                    <div
+                        style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); overflow: hidden;">
+                        <p
+                            style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem;">
+                            Block Hash (SHA-256)</p>
+                        <p
+                            style="font-family: monospace; font-size: 0.7rem; color: hsla(0,0%,100%,0.3); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                            {{ entry.hash }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <div class="card glass" style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Real-time Freshness</h3>
+                <div
+                    style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <canvas id="freshnessChart"></canvas>
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <span
+                            style="display: block; font-size: 2.5rem; font-weight: 700; color: var(--primary);">94%</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px;">OPTIMAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card glass">
+                <h3 style="margin-bottom: 1.5rem;">QR Verification</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Use this QR code for field
+                    verification of the product traceability ledger.</p>
+                <div
+                    style="aspect-ratio: 1; border: 1px solid var(--border); border-radius: 15px; display: flex; align-items: center; justify-content: center; background: white; padding: 1rem;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=freshtrace://verify/{{ product.product_id if product else '0000' }}"
+                        alt="QR Code" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const ctx = document.getElementById('freshnessChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [94, 6],
+                backgroundColor: ['#32a852', 'rgba(255, 255, 255, 0.05)'],
+                borderWidth: 0,
+                cutout: '85%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+        }
+    });
+</script>
+{% endblock %}

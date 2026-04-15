@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <h1>Transparent Traceability <br>for Perishable Goods</h1>
+    <p>Empower your supply chain with our lightweight blockchain and IoT-powered traceability platform. Ensure freshness
+        and safety, from farm to fork.</p>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline">Operator Login</a>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="card glass">
+        <i class="ph-bold ph-cube" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+        <h3>Immutable Ledger</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Transactions and tracking data are stored on a
+            lightweight blockchain, ensuring data integrity and preventing tampering.</p>
+    </div>
+    <div class="card glass">
+        <i class="ph-bold ph-thermometer" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+        <h3>Real-time IoT</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Live temperature, humidity, and location tracking via
+            integrated IoT sensors for every product unit.</p>
+    </div>
+    <div class="card glass">
+        <i class="ph-bold ph-leaf" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+        <h3>Freshness Alerts</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated freshness scoring and critical threshold
+            alerts for perishable goods, reducing waste.</p>
+    </div>
+</section>
+
+<div class="card glass"
+    style="margin-top: 4rem; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; padding: 3rem;">
+    <div style="flex: 1; z-index: 1;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Secure. Scalable. Fresh.</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Our platform is designed specifically for the food
+            industry, focusing on performance and ease of integration.</p>
+        <button class="btn btn-primary">Request Demo</button>
+    </div>
+    <div style="flex: 1; display: flex; justify-content: flex-end; position: relative;">
+        <!-- Simple modern visual element -->
+        <div
+            style="width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity: 0.2; position: absolute; top: -100px; right: -100px;">
+        </div>
+        <div class="glass"
+            style="width: 250px; height: 180px; border-radius: 20px; border-color: var(--primary); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem;">
+            <i class="ph-fill ph-check-circle" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+            <span style="font-weight: 600; font-size: 1.2rem;">99.9% Integrity</span>
+            <span style="color: var(--text-muted); font-size: 0.8rem;">Blockchain Verified</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

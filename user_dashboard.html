@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-top: 3rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 2rem;">Welcome, <span style="color: var(--primary);">{{
+            current_user.full_name }}</span>.</h1>
+
+    <div class="card glass"
+        style="margin-bottom: 3rem; background: radial-gradient(circle at top right, hsla(145,100%,40%,0.1), transparent);">
+        <h3 style="margin-bottom: 1rem;">Track Product</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Enter the unique product ID or
+            scan the QR code to trace the product's journey.</p>
+        <div style="display: flex; gap: 1rem;">
+            <input type="text" id="track_id" class="form-control" style="max-width: 300px;" placeholder="PRD-12345">
+            <button class="btn btn-primary"
+                onclick="window.location.href='/product/trace/' + document.getElementById('track_id').value">
+                Trace Product
+            </button>
+        </div>
+    </div>
+
+    <h2 style="margin-bottom: 1.5rem;">Recent Tracked Items</h2>
+    <div class="dashboard-grid">
+        {% for product in products %}
+        <div class="card glass" style="padding: 1.5rem; border-radius: 24px; position: relative; overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <span class="badge badge-success">{{ product.category }}</span>
+                <i class="ph ph-cube" style="font-size: 1.5rem; color: var(--primary);"></i>
+            </div>
+            <h3 style="margin-bottom: 0.5rem;">{{ product.name }}</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Origin: {{ product.origin }}
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">Product ID</p>
+                    <p style="font-family: monospace; color: var(--primary);">{{ product.product_id }}</p>
+                </div>
+                <a href="{{ url_for('trace_product', product_id=product.product_id) }}" class="btn btn-outline"
+                    style="padding: 0.4rem 1rem; font-size: 0.85rem;">View Journey</a>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: var(--text-muted);">No products found in the supply chain.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card glass" style="margin-top: 4rem; padding: 3rem; text-align: center;">
+        <i class="ph-fill ph-shield-check" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+        <h2>Blockchain Verified Traceability</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0.5rem auto 2rem;">Every record is time-stamped,
+            hash-linked, and permanent. You can trust the data about where your food came from and how it was handled.
+        </p>
+        <button class="btn btn-outline">Learn more about our Blockchain</button>
+    </div>
+</div>
+{% endblock %}

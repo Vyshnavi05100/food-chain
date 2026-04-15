@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card glass auth-form">
+    <h2 style="font-size: 2.2rem; margin-bottom: 2rem; color: var(--accent);">Admin Registration</h2>
+    <form action="{{ url_for('admin_register') }}" method="POST">
+        <div class="form-group">
+            <label for="admin_key">Admin Secret Key</label>
+            <input type="password" name="admin_key" class="form-control" placeholder="Enter registration code" required>
+        </div>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+        <div class="form-group">
+            <label for="username">Admin Username</label>
+            <input type="text" name="username" class="form-control" placeholder="adm_user" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Admin Email</label>
+            <input type="email" name="email" class="form-control" placeholder="admin@freshtrace.com" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Strong password" required>
+        </div>
+        <button type="submit" class="blue-btn btn btn-primary"
+            style="width: 100%; margin-top: 1.5rem; background: var(--accent); color: white;">Register as Admin</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
+        Already have an account? <a href="{{ url_for('login') }}"
+            style="color: var(--accent); text-decoration: none;">Login here</a>
+    </p>
+</div>
+{% endblock %}

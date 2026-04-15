@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-top: 3rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 2rem;">Admin Console - <span style="color: var(--accent);">Blockchain
+            Operator</span>.</h1>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+        <div class="card glass">
+            <h2 style="margin-bottom: 1.5rem; color: var(--accent);">Add New Product Ledger</h2>
+            <form action="{{ url_for('add_product') }}" method="POST">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="Organic Strawberries" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product ID</label>
+                        <input type="text" name="product_id" class="form-control" placeholder="ST-BERRY-9912" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" class="form-control" required>
+                            <option value="Produce">Produce</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Frozen">Frozen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Origin</label>
+                        <input type="text" name="origin" class="form-control" placeholder="Farm #42, Salinas CA"
+                            required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="margin-top: 1rem; width: 100%; background: var(--accent);">
+                    <i class="ph-bold ph-plus" style="margin-right: 0.5rem;"></i>
+                    Register Product on Blockchain
+                </button>
+            </form>
+        </div>
+
+        <div class="card glass" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3>Network Stats</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Light Blockchain
+                    performance metrics.</p>
+                <div style="margin-top: 2rem;">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Ledger Integrity
+                    </p>
+                    <p style="font-size: 1.5rem; color: var(--primary); font-weight: 700;">TRUSTED & VERIFIED</p>
+                    <hr style="border: none; border-top: 1px solid var(--border); margin: 1rem 0;">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Nodes</p>
+                    <p style="font-size: 1.5rem; font-weight: 700;">12 (Distributed)</p>
+                </div>
+            </div>
+            <button class="btn btn-outline" style="width: 100%;">Run Health Check</button>
+        </div>
+    </div>
+
+    <h2 style="margin-bottom: 1.5rem;">Supply Chain Tracking Ledger</h2>
+    <div class="card glass" style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <th style="padding: 1.5rem; color: var(--text-muted);">ID</th>
+                    <th style="padding: 1.5rem; color: var(--text-muted);">PRODUCT</th>
+                    <th style="padding: 1.5rem; color: var(--text-muted);">CATEGORY</th>
+                    <th style="padding: 1.5rem; color: var(--text-muted);">ORIGIN</th>
+                    <th style="padding: 1.5rem; color: var(--text-muted);">HARVESTED</th>
+                    <th style="padding: 1.5rem; color: var(--text-muted);">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 1.5rem; font-family: monospace; color: var(--primary);">{{ p.product_id }}</td>
+                    <td style="padding: 1.5rem; font-weight: 600;">{{ p.name }}</td>
+                    <td style="padding: 1.5rem;">{{ p.category }}</td>
+                    <td style="padding: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">{{ p.origin }}</td>
+                    <td style="padding: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">{{
+                        p.harvest_date.strftime('%Y-%m-%d') }}</td>
+                    <td style="padding: 1.5rem;">
+                        <a href="{{ url_for('trace_product', product_id=p.product_id) }}" class="btn btn-outline"
+                            style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">Trace History</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="padding: 3rem; text-align: center; color: var(--text-muted);">No products
+                        registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
